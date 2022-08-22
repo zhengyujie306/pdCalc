@@ -90,7 +90,7 @@ void Gui::execute() {
     sf::RectangleShape screen({700, 300});
     screen.setPosition({50, 50});
     button.push_back(input);
-    sf::Text tx_screen("numbers", font, 100);
+    sf::Text tx_screen("numbers", font, 30);
     tx_screen.setPosition({50, 50});
     tx_screen.setFillColor(sf::Color::Magenta);
 
@@ -120,10 +120,13 @@ void Gui::execute() {
                 if(!msg.empty()) {
                     std::cout << msg << std::endl;
                     if(msg == "calc") {
+			msg = tx_num;
                         tx_num.clear();
                     }
-                    raise(UserInterface::CommandEntered, std::make_shared<CommandData>(msg));
                 }
+		if(!msg.empty()) {
+		    raise(UserInterface::CommandEntered, std::make_shared<CommandData>(msg));	    
+		}
             }
             else if (event.type == sf::Event::KeyPressed) {
                 int num = event.key.code;
