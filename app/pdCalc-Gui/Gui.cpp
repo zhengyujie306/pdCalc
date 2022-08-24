@@ -45,7 +45,7 @@ void Gui::postMessage(const std::string& m) {
 
 void Gui::execute() {
     sf::Font font;
-    if (!font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf"))
+    if (!font.loadFromFile("/usr/share/fonts/truetype/ubuntu/UbuntuMono-B.ttf"))
         return;
     sf::Text text("Hello SFML", font, 50);
 
@@ -99,7 +99,7 @@ void Gui::execute() {
     while (window.isOpen())
     {
         // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event;
+        sf::Event event{};
         while (window.pollEvent(event))
         {
             // "close requested" event: we close the window
