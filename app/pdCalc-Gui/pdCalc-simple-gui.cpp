@@ -4,11 +4,11 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-#include "include/Gui.h"
-#include "include/CommandDispatcher.h"
-#include "include/AppObservers.h"
-#include "include/Stack.h"
-#include "include/CoreCommands.h"
+#include "Gui.h"
+#include "../../include/CommandDispatcher.h"
+#include "../../include/AppObservers.h"
+#include "../../include/Stack.h"
+#include "../../include/CoreCommands.h"
 
 int main()
 {

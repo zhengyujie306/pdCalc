@@ -3,11 +3,11 @@
 // *** END ***
 #include <iostream>
 #include <memory>
-#include "include/Cli.h"
-#include "include/CommandDispatcher.h"
-#include "include/AppObservers.h"
-#include "include/Stack.h"
-#include "include/CoreCommands.h"
+#include "Cli.h"
+#include "CommandDispatcher.h"
+#include "AppObservers.h"
+#include "Stack.h"
+#include "CoreCommands.h"
 
 // I usually don't make blanket using namespace statements, but this
 // example is meant to be simple.

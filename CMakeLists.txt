@@ -7,27 +7,9 @@ project(base)
 
 add_definitions(-std=c++14)
 
+add_subdirectory(src)
 set(LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
-##### pdCalc-cli
-project(pdCalc-cli)
 
-add_definitions(-std=c++14)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-
-add_subdirectory(src)
-add_executable(pdCalc-cli pdCalc-simple-cli.cpp)
-target_link_libraries(pdCalc-cli base)
-
-
-##### pdCalc-gui
-project(pdCalc-gui)
-
-add_definitions(-std=c++14)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-
-add_executable(pdCalc-gui pdCalc-simple-gui.cpp)
-target_link_libraries(pdCalc-gui base sfml-graphics sfml-window sfml-system)
+add_subdirectory(app)
 

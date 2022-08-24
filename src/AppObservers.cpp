@@ -18,7 +18,7 @@
 
 #include "AppObservers.h"
 #include "Exception.h"
-#include "Cli.h"
+#include "../app/pdCalc-Cli/Cli.h"
 #include "Stack.h"
 #include "UserInterface.h"
 #include <vector>
