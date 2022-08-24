@@ -109,7 +109,7 @@ void Gui::execute() {
                 std::string msg{};
                 int x = event.mouseButton.x;
                 int y = event.mouseButton.y;
-                for(int i = 0; i < button.size(); ++i) {
+                for(unsigned long i = 0; i < button.size(); ++i) {
                     auto lt = button[i].getPosition();
                     auto size = button[i].getSize();
                     if(x >= lt.x && x <= lt.x + size.x && y >= lt.y && y <= lt.y + size.y) {
