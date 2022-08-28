@@ -2,6 +2,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include "Gui.h"
+#include "Button.h"
 #include "Tokenizer.h"
 #include "Stack.h"
 #include <vector>
@@ -49,47 +50,39 @@ void Gui::execute() {
         return;
     sf::Text text("Hello SFML", font, 50);
 
-    // init keyboard
-    std::vector<sf::RectangleShape> button;
-    sf::CircleShape circle(100.f);
-    circle.setFillColor(sf::Color::Magenta);
-    circle.setPosition(100.0, 100.0);
-    //button.push_back(circle);
+    std::vector<sf::Button> Buttons;
+    sf::Button undo((sf::RectangleShape()), sf::Text());
+    undo.setPosition({100, 300});
+    undo.setSize({150, 100});
+    undo.setShapeColor(sf::Color::Cyan);
+    undo.setTextColor(sf::Color::Blue);
+    undo.setFont(font);
+    undo.setString("undo");
+    Buttons.emplace_back(std::move(undo));
 
-    sf::RectangleShape undo({50, 50});
-    sf::RectangleShape redo({50, 50});
-    sf::RectangleShape calc({50, 50});
-    undo.setPosition({300, 300});
-    redo.setPosition({400, 300});
-    calc.setPosition({500, 300});
-    button.push_back(undo);
-    button.push_back(redo);
-    button.push_back(calc);
+    sf::Button redo((sf::RectangleShape()), sf::Text());
+    redo.setPosition({300, 300});
+    redo.setSize({150, 100});
+    redo.setShapeColor(sf::Color::Cyan);
+    redo.setTextColor(sf::Color::Blue);
+    redo.setFont(font);
+    redo.setString("redo");
+    Buttons.emplace_back(std::move(redo));
 
-    sf::Text tx_undo("undo", font, 20);
-    tx_undo.setPosition({300, 300});
-    sf::Text tx_redo("redo", font, 20);
-    tx_redo.setPosition({400, 300});
-    sf::Text tx_calc("calc", font, 20);
-    tx_calc.setPosition({500, 300});
-    tx_undo.setFillColor(sf::Color::Green);
-    tx_redo.setFillColor(sf::Color::Green);
-    tx_calc.setFillColor(sf::Color::Green);
-    std::vector<sf::Text> numButton;
-    numButton.push_back(tx_undo);
-    numButton.push_back(tx_redo);
-    numButton.push_back(tx_calc);
+
 
     sf::RectangleShape input({700, 100});
     input.setPosition({50, 450});
-    button.push_back(input);
+
     sf::Text tx_input("numbers", font, 100);
     tx_input.setPosition({50, 450});
     tx_input.setFillColor(sf::Color::Magenta);
 
-    sf::RectangleShape screen({700, 300});
+    sf::RectangleShape screen({700, 200});
     screen.setPosition({50, 50});
-    button.push_back(input);
+    screen.setFillColor(sf::Color::White);
+    screen.setOutlineColor(sf::Color::Green);
+
     sf::Text tx_screen("numbers", font, 30);
     tx_screen.setPosition({50, 50});
     tx_screen.setFillColor(sf::Color::Magenta);
@@ -109,41 +102,49 @@ void Gui::execute() {
                 std::string msg{};
                 int x = event.mouseButton.x;
                 int y = event.mouseButton.y;
-                for(unsigned long i = 0; i < button.size(); ++i) {
-                    auto lt = button[i].getPosition();
-                    auto size = button[i].getSize();
+                for(auto & Button : Buttons) {
+                    auto lt = Button.getPosition();
+                    auto size = Button.getSize();
                     if(x >= lt.x && x <= lt.x + size.x && y >= lt.y && y <= lt.y + size.y) {
-                        msg = numButton[i].getString();
+                        msg = Button.getString();
                         break;
                     }
                 }
-                if(!msg.empty()) {
-                    std::cout << msg << std::endl;
-                    if(msg == "calc") {
-			msg = tx_num;
-                        tx_num.clear();
-                    }
-                }
-		if(!msg.empty()) {
-		    raise(UserInterface::CommandEntered, std::make_shared<CommandData>(msg));	    
-		}
+		        if(!msg.empty()) {
+		            raise(UserInterface::CommandEntered, std::make_shared<CommandData>(msg));
+		        }
             }
             else if (event.type == sf::Event::KeyPressed) {
                 int num = event.key.code;
                 if (num >= 26 && num <= 35) tx_num.push_back(num -26 + '0');
                 else if(num >= 0 && num <= 25) tx_num.push_back('a' + num);
+                else if(num == sf::Keyboard::Key::Enter) {
+                    if(!tx_num.empty()) {
+                        raise(UserInterface::CommandEntered, std::make_shared<CommandData>(tx_num));
+                        tx_num.clear();
+                    }
+
+                }
+                else if(num == sf::Keyboard::Key::BackSpace) {
+                    if(!tx_num.empty()) tx_num.pop_back();
+                }
                 std::cout << tx_num << std::endl;
             }
         }
 
 
-        window.clear();
-        for(auto& shape:button) window.draw(shape);
-        for(auto& tx:numButton) window.draw(tx);
+        window.clear({113, 115, 117});
+        for(auto& shape:Buttons) window.draw(shape);
+
+
+        window.draw(screen);
+        window.draw(input);
         tx_input.setString(tx_num);
         window.draw(tx_input);
         tx_screen.setString(screen_display);
         window.draw(tx_screen);
+
+
         window.display();
 
     }

@@ -12,7 +12,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1000, 800), "My window");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "pdCalc-SFML-GUI");
     pdCalc::Gui gui(window);
     pdCalc::CommandDispatcher ce{gui};
 
