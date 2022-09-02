@@ -48,7 +48,6 @@ void Gui::execute() {
     sf::Font font;
     if (!font.loadFromFile("/usr/share/fonts/truetype/ubuntu/UbuntuMono-B.ttf"))
         return;
-    sf::Text text("Hello SFML", font, 50);
 
     std::vector<sf::Button> Buttons;
     sf::Button undo((sf::RectangleShape()), sf::Text());
