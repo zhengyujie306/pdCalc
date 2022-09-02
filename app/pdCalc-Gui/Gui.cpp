@@ -68,6 +68,15 @@ void Gui::execute() {
     redo.setString("redo");
     Buttons.emplace_back(std::move(redo));
 
+    sf::Button shiftButton((sf::RectangleShape()), sf::Text());
+    shiftButton.setPosition({500, 300});
+    shiftButton.setSize({150, 100});
+    shiftButton.setShapeColor(sf::Color::Cyan);
+    shiftButton.setTextColor(sf::Color::Blue);
+    shiftButton.setFont(font);
+    shiftButton.setString("shift");
+    Buttons.emplace_back(std::move(shiftButton));
+
 
 
     sf::RectangleShape input({700, 100});
@@ -88,6 +97,7 @@ void Gui::execute() {
 
     // run the program as long as the window is open
     std::string tx_num{};
+    bool shift = false;
     while (window.isOpen())
     {
         // check all the window's events that were triggered since the last iteration of the loop
@@ -110,14 +120,18 @@ void Gui::execute() {
                     }
                 }
 		        if(!msg.empty()) {
-		            raise(UserInterface::CommandEntered, std::make_shared<CommandData>(msg));
+                    if(msg == "shift") {
+                        shift = !shift;
+                        Buttons[2].setShapeColor(shift ? sf::Color::Red : sf::Color::Cyan);
+                    }
+                    else raise(UserInterface::CommandEntered, std::make_shared<CommandData>(msg));
 		        }
             }
             else if (event.type == sf::Event::KeyPressed) {
-                int num = event.key.code;
-                if (num >= 26 && num <= 35) tx_num.push_back(num -26 + '0');
-                else if(num >= 0 && num <= 25) tx_num.push_back('a' + num);
-                else if(num == sf::Keyboard::Key::Enter) {
+                auto num = event.key.code;
+                std::cout << num << std::endl;
+
+                if(num == sf::Keyboard::Key::Enter) {
                     if(!tx_num.empty()) {
                         raise(UserInterface::CommandEntered, std::make_shared<CommandData>(tx_num));
                         tx_num.clear();
@@ -127,7 +141,27 @@ void Gui::execute() {
                 else if(num == sf::Keyboard::Key::BackSpace) {
                     if(!tx_num.empty()) tx_num.pop_back();
                 }
-                std::cout << tx_num << std::endl;
+                else if(num == sf::Keyboard::Key::LShift || num == sf::Keyboard::Key::RShift) {
+                    shift = !shift;
+                    Buttons[2].setShapeColor(shift ? sf::Color::Red : sf::Color::Cyan);
+                }
+                else if(num == sf::Keyboard::Key::Hyphen) raise(UserInterface::CommandEntered, std::make_shared<CommandData>("-"));
+                else if(num == sf::Keyboard::Key::Equal && shift) {
+                    raise(UserInterface::CommandEntered, std::make_shared<CommandData>("+"));
+                    shift = !shift;
+                    Buttons[2].setShapeColor(shift ? sf::Color::Red : sf::Color::Cyan);
+                }
+                else if(num == sf::Keyboard::Key::Num8 && shift) {
+                    raise(UserInterface::CommandEntered, std::make_shared<CommandData>("*"));
+                    shift = !shift;
+                    Buttons[2].setShapeColor(shift ? sf::Color::Red : sf::Color::Cyan);
+                }
+                else if(num == sf::Keyboard::Key::Slash) {
+                    raise(UserInterface::CommandEntered, std::make_shared<CommandData>("/"));
+                }
+                else if (num >= 26 && num <= 35) tx_num.push_back(num -26 + '0');
+                else if(num >= 0 && num <= 25) tx_num.push_back('a' + num);
+                //std::cout << tx_num << std::endl;
             }
         }
 
